@@ -3,22 +3,23 @@ let ans = document.getElementById("input")! as HTMLInputElement;
 ans.value = "0";
 let expression:string = "";
 let memory:number = 0;
-let valuee:string
+let eventVal:string
 
 
 actions.addEventListener("click", (e:Event) => {
     const target = e.target as HTMLInputElement | HTMLButtonElement;
-    valuee = target.value || (target.parentElement as HTMLButtonElement)?.value;
-    callFun(valuee)
+    eventVal = target.value || (target.parentElement as HTMLButtonElement)?.value;
+    callFuntion(eventVal)
 })
 
 document.addEventListener("keyup",(e:KeyboardEvent)=>{
     console.log(e.key)
-    if(e.key == "=" || e.key=="1" || e.key=="2" || e.key=="3" || e.key=="4" || e.key=="5" || e.key=="6" || e.key=="7" || e.key=="8" || e.key=="9" || e.key=="+" || e.key=="-" || e.key=="*" || e.key=="/" || e.key=="."|| e.key=="Enter"){
-        callFun(e.key)
+    if(e.key == "=" || e.key=="0" || e.key=="1" || e.key=="2" || e.key=="3" || e.key=="4" || e.key=="5" || e.key=="6" || e.key=="7" || e.key=="8" || e.key=="9" || e.key=="+" || e.key=="-" || e.key=="*" || e.key=="/" || e.key=="."|| e.key=="Enter" 
+    ||e.key=="Backspace" || e.key=="!" || e.key=="(" || e.key==")" || e.key=="%" || e.key=="^" ){
+        callFuntion(e.key)
     }
 })
- function callFun(value:string){
+ function callFuntion(value:string){
     if (value !== undefined) {
         ans.value = "";
         switch (value) {
@@ -118,6 +119,7 @@ document.addEventListener("keyup",(e:KeyboardEvent)=>{
             break;
     
           case "clear":
+          case "Backspace":
             expression = expression
               .toString()
               .substring(0, expression.toString().length - 1);
@@ -173,18 +175,12 @@ document.addEventListener("keyup",(e:KeyboardEvent)=>{
             break;
     
           case "factorial":
-            let fact = 1;
-            if (isNaN(parseFloat(expression))) {
-              expression = "Error";
-            } else {
-              for (let i:number = 1; i <= parseFloat(expression); i++) {
-                fact *= i;
-              }
-              expression = fact.toString();
-            }
+          case "!":
+            expression += "!"          
             break;
     
           case "numpow":
+          case "^":
             expression += "^";
             break;
     
@@ -200,6 +196,8 @@ document.addEventListener("keyup",(e:KeyboardEvent)=>{
                 ln();
               } else if (expression.includes("^")) {
                 numpower();
+              } else if(expression.includes("!")){
+                factorialNum()
               } else {
                 const answer = eval(expression);
                 expression = answer;
@@ -255,65 +253,7 @@ document.addEventListener("keyup",(e:KeyboardEvent)=>{
     
           default:
             expression += value;
-        }
-    
-        function removezero() {
-          if (expression.charAt(0) === "0") {
-            expression = expression
-              .toString()
-              .substring(1, expression.toString().length);
-          }
-        }
-    
-        // Function to calculate log10
-       
-        function logten() {
-           const e:string = expression.substring(3, expression.length);
-          expression = Math.log10(parseFloat(e)).toString();
-        }
-    
-        // function to calculate ln
-        function ln() {
-          const e:string = expression.substring(2, expression.length);
-          expression = Math.log(parseFloat(e)).toString();
-        }
-    
-        //function to calculate squareroot
-        function squareroot() {
-          const e:string = expression.substring(1, expression.length);       
-          expression = Math.sqrt(parseFloat(e)).toString();
-        }
-    
-        //function to calculate power
-        function numpower() {
-          let symbol:number = expression.indexOf("^");
-          let exp1:string = expression.slice(0, symbol);
-          var exp2:string = expression.slice(symbol + 1, expression.length);
-          expression = (parseFloat(exp1) ** parseFloat(exp2)).toString();
-        }
-    
-        //function to convert radian to degree and degree to radian
-        function degrad() {
-          let val = document.getElementById("rd")! as HTMLButtonElement;
-    
-          if (val.value === "DEG") {
-            expression = (parseFloat(expression) * (180 / Math.PI)).toString();
-            val.value = "RAD";
-          } else {
-            expression = (parseFloat(expression) * (Math.PI / 180)).toString();
-            val.value = "DEG";
-          }
-          forNaN(expression);
-        }
-    
-        //function to check if the value of expression is NaN
-        function forNaN(exp:string):void {
-          if (isNaN(parseFloat(exp))) {
-            expression = "Error";
-          } else {
-            expression = exp;
-          }
-        }
+        } 
     
         if (expression == undefined) {
           expression = "";
@@ -322,7 +262,72 @@ document.addEventListener("keyup",(e:KeyboardEvent)=>{
           ans.value = expression;
         }
       }
-    
-    
  }
+ function removezero() {
+    if (expression.charAt(0) === "0") {
+      expression = expression
+        .toString()
+        .substring(1, expression.toString().length);
+    }
+  }
+
+  function factorialNum(){
+      let fact = 1;
+      if (isNaN(parseFloat(expression))) {
+        expression = "Error";
+      } else {
+        for (let i:number = 1; i <= parseFloat(expression); i++) {
+          fact *= i;
+        }
+        expression = fact.toString();
+      }
+  }
+  // Function to calculate log10       
+  function logten() {
+     const e:string = expression.substring(3, expression.length);
+    expression = Math.log10(parseFloat(e)).toString();
+  }
+
+  // function to calculate ln
+  function ln() {
+    const e:string = expression.substring(2, expression.length);
+    expression = Math.log(parseFloat(e)).toString();
+  }
+
+  //function to calculate squareroot
+  function squareroot() {
+    const e:string = expression.substring(1, expression.length);       
+    expression = Math.sqrt(parseFloat(e)).toString();
+  }
+
+  //function to calculate power
+  function numpower() {
+    let symbol:number = expression.indexOf("^");
+    let exp1:string = expression.slice(0, symbol);
+    var exp2:string = expression.slice(symbol + 1, expression.length);
+    expression = (parseFloat(exp1) ** parseFloat(exp2)).toString();
+  }
+
+  //function to convert radian to degree and degree to radian
+  function degrad() {
+    let val = document.getElementById("rd")! as HTMLButtonElement;
+
+    if (val.value === "DEG") {
+      expression = (parseFloat(expression) * (180 / Math.PI)).toString();
+      val.value = "RAD";
+    } else {
+      expression = (parseFloat(expression) * (Math.PI / 180)).toString();
+      val.value = "DEG";
+    }
+    forNaN(expression);
+  }
+
+  //function to check if the value of expression is NaN
+  function forNaN(exp:string):void {
+    if (isNaN(parseFloat(exp))) {
+      expression = "Error";
+    } else {
+      expression = exp;
+    }
+  }
   
