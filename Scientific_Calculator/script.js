@@ -3,6 +3,7 @@ const ans = document.getElementById("input");
 ans.value = 0;
 let expression = "";
 memory = 0;
+console.log("abc")
 actions.addEventListener("click", (e) => {
   const value = e.target.value || e.target.parentElement.value;
 
