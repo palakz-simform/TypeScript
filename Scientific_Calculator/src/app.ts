@@ -17,8 +17,9 @@ document.addEventListener("keyup", (e: KeyboardEvent) => {
         callFuntion<string>(e.key)
     }
 })
-function callFuntion<T>(value: T): void {
+function callFuntion<T>(value: T): void {    
     if (value !== undefined) {
+        removezero()
         ans.value = "";
         switch (value) {
             case "DEG":
@@ -184,7 +185,6 @@ function callFuntion<T>(value: T): void {
             case "=":
             case "Enter":
                 removezero();
-                // try {
                 if (expression.toString().includes("√")) {
                     squareroot();
                 } else if (expression.toString().includes("log")) {
@@ -252,16 +252,22 @@ function callFuntion<T>(value: T): void {
 
             default:
                 let exp: string = expression + value;
+                console.log(expression)
                 let lastChar: boolean = exp.charAt(exp.length - 1) == "/" || exp.charAt(exp.length - 1) == "+" || exp.charAt(exp.length - 1) == "-" || exp.charAt(exp.length - 1) == "*"
-                let secLastChar: boolean = expression.charAt(expression.length - 1) == "/" || expression.charAt(expression.length - 1) == "+" || expression.charAt(expression.length - 1) == "-" || expression.charAt(expression.length - 1) == "*"
-                if (lastChar && secLastChar) {
-                    expression = expression
-                }
+                if(expression){
+                    let secLastChar: boolean = expression.charAt(expression.length - 1) == "/" || expression.charAt(expression.length - 1) == "+" || expression.charAt(expression.length - 1) == "-" || expression.charAt(expression.length - 1) == "*"
+                    if (lastChar && secLastChar) {
+                        expression = expression
+                    }
+                    else {
+                        expression += value;
+                    }
+                }  
                 else {
                     expression += value;
-                }
+                }             
+                
         }
-
         if (expression == undefined) {
             expression = "";
             ans.value = "0";
@@ -271,7 +277,7 @@ function callFuntion<T>(value: T): void {
     }
 }
 
-function removezero(): void {
+function removezero(): void {    
     if (expression.toString().charAt(0) === '0') {
         expression = expression.toString().substring(1, expression.toString().length);
     }

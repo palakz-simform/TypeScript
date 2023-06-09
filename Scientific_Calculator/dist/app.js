@@ -19,6 +19,7 @@ document.addEventListener("keyup", (e) => {
 });
 function callFuntion(value) {
     if (value !== undefined) {
+        removezero();
         ans.value = "";
         switch (value) {
             case "DEG":
@@ -155,7 +156,6 @@ function callFuntion(value) {
             case "=":
             case "Enter":
                 removezero();
-                // try {
                 if (expression.toString().includes("√")) {
                     squareroot();
                 }
@@ -192,7 +192,7 @@ function callFuntion(value) {
                 expression = "ln";
                 break;
             case "log10":
-                expression = "log";
+                expression += "log";
                 break;
             case "sin":
                 expression += 'sin(';
@@ -221,10 +221,16 @@ function callFuntion(value) {
                 break;
             default:
                 let exp = expression + value;
+                console.log(expression);
                 let lastChar = exp.charAt(exp.length - 1) == "/" || exp.charAt(exp.length - 1) == "+" || exp.charAt(exp.length - 1) == "-" || exp.charAt(exp.length - 1) == "*";
-                let secLastChar = expression.charAt(expression.length - 1) == "/" || expression.charAt(expression.length - 1) == "+" || expression.charAt(expression.length - 1) == "-" || expression.charAt(expression.length - 1) == "*";
-                if (lastChar && secLastChar) {
-                    expression = expression;
+                if (expression) {
+                    let secLastChar = expression.charAt(expression.length - 1) == "/" || expression.charAt(expression.length - 1) == "+" || expression.charAt(expression.length - 1) == "-" || expression.charAt(expression.length - 1) == "*";
+                    if (lastChar && secLastChar) {
+                        expression = expression;
+                    }
+                    else {
+                        expression += value;
+                    }
                 }
                 else {
                     expression += value;
