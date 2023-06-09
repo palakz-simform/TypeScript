@@ -12,7 +12,6 @@ actions.addEventListener("click", (e) => {
     callFuntion(eventVal);
 });
 document.addEventListener("keyup", (e) => {
-    console.log(e.key);
     if (e.key == "=" || e.key == "0" || e.key == "1" || e.key == "2" || e.key == "3" || e.key == "4" || e.key == "5" || e.key == "6" || e.key == "7" || e.key == "8" || e.key == "9" || e.key == "+" || e.key == "-" || e.key == "*" || e.key == "/" || e.key == "." || e.key == "Enter"
         || e.key == "Backspace" || e.key == "!" || e.key == "(" || e.key == ")" || e.key == "%" || e.key == "^") {
         callFuntion(e.key);
@@ -156,29 +155,33 @@ function callFuntion(value) {
             case "=":
             case "Enter":
                 removezero();
-                try {
-                    if (expression.includes("√")) {
-                        squareroot();
-                    }
-                    else if (expression.includes("log")) {
-                        logten();
-                    }
-                    else if (expression.includes("ln")) {
-                        ln();
-                    }
-                    else if (expression.includes("^")) {
-                        numpower();
-                    }
-                    else if (expression.includes("!")) {
-                        factorialNum();
-                    }
-                    else {
+                // try {
+                if (expression.toString().includes("√")) {
+                    squareroot();
+                }
+                else if (expression.toString().includes("log")) {
+                    logten();
+                }
+                else if (expression.toString().includes("ln")) {
+                    ln();
+                }
+                else if (expression.toString().includes("^")) {
+                    numpower();
+                }
+                else if (expression.toString().includes("!")) {
+                    factorialNum();
+                }
+                else if (expression.toString().includes("sin") || expression.toString().includes("cos") || expression.toString().includes("tan")) {
+                    trignoCalc();
+                }
+                else {
+                    try {
                         const answer = eval(expression);
                         expression = answer;
                     }
-                }
-                catch (_a) {
-                    expression = "Syntax Error";
+                    catch (_a) {
+                        expression = "Syntax Error";
+                    }
                 }
                 forNaN(expression);
                 break;
@@ -192,16 +195,13 @@ function callFuntion(value) {
                 expression = "log";
                 break;
             case "sin":
-                expression = Math.sin(parseFloat(expression)).toString();
-                forNaN(expression);
+                expression += 'sin(';
                 break;
             case "cos":
-                expression = Math.cos(parseFloat(expression)).toString();
-                forNaN(expression);
+                expression += 'cos(';
                 break;
             case "tan":
-                expression = Math.tan(parseFloat(expression)).toString();
-                forNaN(expression);
+                expression += 'tan(';
                 break;
             case "+/-":
                 if (parseFloat(expression) > 0) {
@@ -213,14 +213,22 @@ function callFuntion(value) {
                 break;
             case "0":
                 if (expression === "0") {
-                    expression = value;
+                    expression = value.toString();
                 }
                 else {
                     expression += 0;
                 }
                 break;
             default:
-                expression += value;
+                let exp = expression + value;
+                let lastChar = exp.charAt(exp.length - 1) == "/" || exp.charAt(exp.length - 1) == "+" || exp.charAt(exp.length - 1) == "-" || exp.charAt(exp.length - 1) == "*";
+                let secLastChar = expression.charAt(expression.length - 1) == "/" || expression.charAt(expression.length - 1) == "+" || expression.charAt(expression.length - 1) == "-" || expression.charAt(expression.length - 1) == "*";
+                if (lastChar && secLastChar) {
+                    expression = expression;
+                }
+                else {
+                    expression += value;
+                }
         }
         if (expression == undefined) {
             expression = "";
@@ -232,10 +240,34 @@ function callFuntion(value) {
     }
 }
 function removezero() {
-    if (expression.charAt(0) === "0") {
-        expression = expression
-            .toString()
-            .substring(1, expression.toString().length);
+    if (expression.toString().charAt(0) === '0') {
+        expression = expression.toString().substring(1, expression.toString().length);
+    }
+}
+function trignoCalc() {
+    if (expression.includes(')')) {
+        const num = expression.substring(4, expression.length - 1);
+        if (expression.includes('sin')) {
+            expression = Math.sin(parseFloat(num)).toString();
+        }
+        else if (expression.includes('cos')) {
+            expression = Math.cos(parseFloat(num)).toString();
+        }
+        else if (expression.includes('tan')) {
+            expression = Math.tan(parseFloat(num)).toString();
+        }
+    }
+    else {
+        const num = expression.substring(4, expression.length);
+        if (expression.includes('sin')) {
+            expression = Math.sin(parseFloat(num)).toString();
+        }
+        else if (expression.includes('cos')) {
+            expression = Math.cos(parseFloat(num)).toString();
+        }
+        else if (expression.includes('tan')) {
+            expression = Math.tan(parseFloat(num)).toString();
+        }
     }
 }
 function factorialNum() {
@@ -252,18 +284,18 @@ function factorialNum() {
 }
 // Function to calculate log10       
 function logten() {
-    const e = expression.substring(3, expression.length);
-    expression = Math.log10(parseFloat(e)).toString();
+    const num = expression.substring(3, expression.length);
+    expression = Math.log10(parseFloat(num)).toString();
 }
 // function to calculate ln
 function ln() {
-    const e = expression.substring(2, expression.length);
-    expression = Math.log(parseFloat(e)).toString();
+    const num = expression.substring(2, expression.length);
+    expression = Math.log(parseFloat(num)).toString();
 }
 //function to calculate squareroot
 function squareroot() {
-    const e = expression.substring(1, expression.length);
-    expression = Math.sqrt(parseFloat(e)).toString();
+    const num = expression.substring(1, expression.length);
+    expression = Math.sqrt(parseFloat(num)).toString();
 }
 //function to calculate power
 function numpower() {
@@ -285,12 +317,11 @@ function degrad() {
     }
     forNaN(expression);
 }
-//function to check if the value of expression is NaN
-function forNaN(exp) {
+const forNaN = (exp) => {
     if (isNaN(parseFloat(exp))) {
         expression = "Error";
     }
     else {
         expression = exp;
     }
-}
+};
