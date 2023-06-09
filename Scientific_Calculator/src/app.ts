@@ -270,12 +270,14 @@ function callFuntion<T>(value: T): void {
         }
     }
 }
+
 function removezero(): void {
     if (expression.toString().charAt(0) === '0') {
         expression = expression.toString().substring(1, expression.toString().length);
     }
 }
 
+// Function for Trignometric function
 function trignoCalc(): void {
     if (expression.includes(')')) {
         const num: string = expression.substring(4, expression.length - 1);
@@ -303,6 +305,7 @@ function trignoCalc(): void {
     }
 }
 
+// Function for factorial of number 
 function factorialNum(): void {
     let fact: number = 1;
     if (isNaN(parseFloat(expression))) {
@@ -366,4 +369,3 @@ const forNaN: forNaN = (exp) => {
         expression = exp;
     }
 }
-

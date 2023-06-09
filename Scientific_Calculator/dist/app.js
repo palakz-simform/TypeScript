@@ -244,6 +244,7 @@ function removezero() {
         expression = expression.toString().substring(1, expression.toString().length);
     }
 }
+// Function for Trignometric function
 function trignoCalc() {
     if (expression.includes(')')) {
         const num = expression.substring(4, expression.length - 1);
@@ -270,6 +271,7 @@ function trignoCalc() {
         }
     }
 }
+// Function for factorial of number 
 function factorialNum() {
     let fact = 1;
     if (isNaN(parseFloat(expression))) {
