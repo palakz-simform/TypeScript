@@ -221,7 +221,6 @@ function callFuntion(value) {
                 break;
             default:
                 let exp = expression + value;
-                console.log(expression);
                 let lastChar = exp.charAt(exp.length - 1) == "/" || exp.charAt(exp.length - 1) == "+" || exp.charAt(exp.length - 1) == "-" || exp.charAt(exp.length - 1) == "*";
                 if (expression) {
                     let secLastChar = expression.charAt(expression.length - 1) == "/" || expression.charAt(expression.length - 1) == "+" || expression.charAt(expression.length - 1) == "-" || expression.charAt(expression.length - 1) == "*";
